@@ -22,16 +22,17 @@
 
 /*
  * Frequency is high so that the stepper motor is (more or less) not audible
+ * when holding
  */
 #define MOTOR_FREQUENCY (15000)
 
 /*
- * Power supply is 12V power supply,the motor is rated for 1.5 Amps max, with a
- * resistance of 2.3 Ohms. In an ideal world. This would normally be a 28% duty
- * cycle, however the frequency of our PWM is quite a bit above the cutoff
- * frequency of the motor (4 mH inductance, cutoff is 91 Hz), so lot of
- * attenuation is happening, and there is a pretty non-linear response to the
- * duty cycle because of this.
+ * Power supply is 12V, the motor is rated for 1.5 Amps max, with a resistance
+ * of 2.3 Ohms. In an ideal world, this would normally be a 28% duty cycle,
+ * however the frequency of our PWM is quite a bit above the cutoff frequency
+ * of the motor (4 mH inductance, cutoff is 91 Hz), so lot of attenuation is
+ * happening, and there is a pretty non-linear response to the duty cycle
+ * because of this.
  *
  * As such, this was determined empirically, mostly by checking if the stepper
  * motor driver was too hot to touch
@@ -190,13 +191,17 @@ int main() {
     gpio_set_dir(FAN_PIN, GPIO_OUT);
     gpio_put(FAN_PIN, 0);
 
-    /* Motor gate */
-
     /* Motor */
-    uint32_t pwm_mask = 0;
+    /*
+     * The motor is driven in half-step mode. This results in uneven torque and
+     * lower average torque than dual phase stepping, since each alternating
+     * step uses either 1 or 2 phases of the motor. However, the motor runs
+     * much smoother since it effectively doubles the number of steps
+     */
     motor = stepper_create(STEPS_PER_REV, MAX_RPM, STEPPER_MODE_HALF_STEP,
                            MOTOR_ENABLE_PIN);
 
+    uint32_t pwm_mask = 0;
     for (int i = 0; i < ARRAY_COUNT(motor_pins); i++) {
         unsigned int slice_num = pwm_gpio_to_slice_num(motor_pins[i]);
         unsigned int chan = pwm_gpio_to_channel(motor_pins[i]);
