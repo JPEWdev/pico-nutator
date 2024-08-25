@@ -77,3 +77,13 @@ the `BOOTSEL` button while plugging it into the USB port of your computer. The
 Pico Pi will show up as a removal USB drive. Copy the `nutator.bin` file to
 this USB drive, and the Pico Pi will automatically reboot and start executing
 the program.
+
+
+## Final Assembly
+
+Here is a picture of the final assembled rocker I built:
+![Rocker](./images/rocker.png)
+
+And here is a close up of the electronics with the control board and H-bridge
+labeled:
+![Control Electronics](./images/control.png)
