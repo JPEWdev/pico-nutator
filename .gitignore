@@ -50,3 +50,21 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+# Python files
+*.pyc
+
+# KiCad
+*/*-backups/*.zip
+_autosave-*
+*.lck
+fp-info-cache
+*/#auto_saved_files#
+
+# Build output
+/build
+
+# Vim files
+*.bak
+*.swp
+*.swo
